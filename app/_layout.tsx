@@ -1,26 +1,26 @@
-import { Stack, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { Slot } from "expo-router";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
+
+function AppLayout() {
+  const { user, isLoadingUser } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoadingUser) {
+      if (!user) router.replace("/auth");
+      else router.replace("/(tabs)");
+    }
+  }, [user, isLoadingUser]);
+
+  return <Slot />;
+}
 
 export default function RootLayout() {
-  const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
-  const isAuth = false;
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (isMounted && !isAuth) {
-      router.replace("/auth");
-    }
-  }, [isMounted, isAuth]);
-
-  if (!isMounted) return null; // prevent premature render
-
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <AuthProvider>
+      <AppLayout />
+    </AuthProvider>
   );
 }
