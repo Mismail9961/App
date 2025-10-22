@@ -8,9 +8,9 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  Text,
 } from "react-native";
-import { TextInput, Button, Text } from "react-native-paper";
-import { LinearGradient } from "expo-linear-gradient";
+import { TextInput, Button } from "react-native-paper";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "expo-router";
 
@@ -22,7 +22,6 @@ export default function AuthScreen() {
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const { signIn, signUp } = useAuth();
   const router = useRouter();
 
@@ -41,10 +40,7 @@ export default function AuthScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={["#0F2027", "#203A43", "#2C5364"]}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -54,33 +50,38 @@ export default function AuthScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {/* ✅ Logo Section */}
           <View style={styles.logoContainer}>
             <Image
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/1047/1047711.png",
-              }}
+              source={require("../assets/images/logo.png")}
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.appTitle}>FitPulse</Text>
             <Text style={styles.appSubtitle}>
-              {isSignUp ? "Start your journey 💪" : "Welcome back, champ 🏋️‍♂️"}
+              {isSignUp ? "Sign Up" : "Login Here"}
             </Text>
           </View>
 
+          {/* ✅ Auth Card */}
           <View style={styles.card}>
             <TextInput
               label="Email"
               value={email}
               onChangeText={setEmail}
               mode="outlined"
-              left={<TextInput.Icon icon="email-outline" />}
               style={styles.input}
               keyboardType="email-address"
               autoCapitalize="none"
               textContentType="emailAddress"
               autoCorrect={false}
-              editable
+              theme={{
+                colors: {
+                  primary: "#B9B093", // Focused border & label
+                  outline: "#B9B093", // Default border
+                  text: "#000",
+                  placeholder: "#999",
+                },
+              }}
             />
 
             <TextInput
@@ -88,7 +89,6 @@ export default function AuthScreen() {
               value={password}
               onChangeText={setPassword}
               mode="outlined"
-              left={<TextInput.Icon icon="lock-outline" />}
               right={
                 <TextInput.Icon
                   icon={hidePassword ? "eye-off-outline" : "eye-outline"}
@@ -99,7 +99,14 @@ export default function AuthScreen() {
               style={styles.input}
               textContentType="password"
               autoCorrect={false}
-              editable
+              theme={{
+                colors: {
+                  primary: "#B9B093",
+                  outline: "#B9B093",
+                  text: "#000",
+                  placeholder: "#999",
+                },
+              }}
             />
 
             {error && <Text style={styles.errorText}>{error}</Text>}
@@ -108,7 +115,7 @@ export default function AuthScreen() {
               mode="contained"
               onPress={handleAuth}
               style={styles.button}
-              labelStyle={{ fontSize: 16, fontWeight: "700" }}
+              labelStyle={{ fontSize: 16, fontWeight: "700", color: "#fff" }}
               contentStyle={{ paddingVertical: 6 }}
             >
               {isSignUp ? "Sign Up" : "Sign In"}
@@ -127,13 +134,14 @@ export default function AuthScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -146,50 +154,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   logo: {
-    width: width * 0.25,
-    height: width * 0.25,
-    tintColor: "#00e676",
-  },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: "900",
-    color: "#fff",
-    marginTop: 8,
-    letterSpacing: 1,
-    textAlign: "center",
+    width: 185,
+    height: 151,
   },
   appSubtitle: {
-    color: "#a8dadc",
-    fontSize: 14,
-    marginTop: 4,
+    color: "#B9B093",
+    fontSize: 16,
+    fontFamily: "Franklin Gothic Demi", // Make sure it's loaded via expo-font
+    lineHeight: 26,
     textAlign: "center",
+    marginTop: 7,
+    opacity: 1,
   },
   card: {
     marginHorizontal: 20,
-    backgroundColor: "rgba(255,255,255,0.1)",
     padding: 20,
-    borderRadius: 20,
   },
   input: {
     marginBottom: 16,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: "#00e676",
+    backgroundColor: "#B9B093",
     marginTop: 8,
     borderRadius: 12,
   },
   toggleText: {
-    color: "#fff",
+    color: "#333",
     textAlign: "center",
     marginTop: 16,
   },
   toggleHighlight: {
-    color: "#00e676",
+    color: "#B9B093",
     fontWeight: "bold",
   },
   errorText: {
-    color: "#ff5252",
+    color: "#B9B093",
     textAlign: "center",
     marginBottom: 10,
   },
