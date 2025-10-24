@@ -1,31 +1,30 @@
-import { Slot, useRouter } from "expo-router";
+import { Slot } from "expo-router";
 import { useEffect } from "react";
-import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { ActivityIndicator, View } from "react-native";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { useRouter } from "expo-router";
 
 function AppLayout() {
   const { user, isLoadingUser } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoadingUser) return; // wait until auth state is ready
+    if (isLoadingUser) return;
 
-    // ✅ Avoid redirect loops
     if (!user) {
       router.replace("/auth");
     } else {
       router.replace("/(tabs)");
     }
-  }, [user, isLoadingUser]);
+  }, [user, isLoadingUser, router]);
 
-  // ✅ Optional loading screen
   if (isLoadingUser) {
     return (
       <View
         style={{
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: "center" as const,
+          justifyContent: "center" as const,
           backgroundColor: "#fff",
         }}
       >
