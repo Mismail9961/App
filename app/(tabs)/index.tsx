@@ -50,10 +50,7 @@ export default function Index() {
 
       {/* Sidebar */}
       <Animated.View
-        style={[
-          styles.sidebar,
-          { transform: [{ translateX: slideAnim }] },
-        ]}
+        style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}
       >
         {menuItems.map((item, index) => (
           <TouchableOpacity
@@ -78,9 +75,7 @@ export default function Index() {
             <Ionicons name="menu" size={28} color="#6B5F4A" />
           </TouchableOpacity>
           <Image
-            source={{
-              uri: "https://i.ibb.co/1X2Y1vC/logo.png",
-            }}
+            source={require("../../assets/images/logo.png")}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
   },
-  logo: { width: 90, height: 40 },
+  logo: { width: 90, height: 80 },
 
   searchContainer: {
     marginTop: 15,
